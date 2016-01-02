@@ -1,17 +1,24 @@
 'use strict'
 
 var gulp = require('gulp')
-var release = require('../index')
+var path = require('path')
+var here = require('../index')
 var cssmin = require('gulp-cssmin')
 
 gulp.task('default', function () {
+    var asserts = gulp.src(['asserts/*.css','asserts/*.js']).pipe(cssmin())
+
     return gulp.src('asserts/*.html')
             .pipe(
-                release(
-                    gulp.src(['asserts/*.css','asserts/*.js'])
-                        .pipe(cssmin())
-                    , {
+                here(
+                    asserts, {
                         name: 'asserts',
+                        transform: function (file, target, opt) {
+                            if (/\.css$/.test(file.path)) 
+                                return '<link rel="stylesheet" href="$" />'.replace('$', 'path/to/' + path.basename(file.path))
+
+                            return true
+                        },
                         sort: function (resources, target) {
                             // resource => ['dist/a.js', 'dist/b.js', 'dist/a.css']
                             function isSecondary (f) {
@@ -27,6 +34,11 @@ gulp.task('default', function () {
                             })
                         }
                     }
+                )
+            )
+            .pipe(
+                here(
+                    asserts, { name: 'release' }
                 )
             )
             .pipe(gulp.dest('dist'))
