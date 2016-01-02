@@ -42,7 +42,7 @@ Into resource to HTML:
 </html>
 ```
 
-Will get result: 
+Render result: 
 
 ```html
 <!DOCTYPE html>
