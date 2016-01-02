@@ -143,7 +143,8 @@ module.exports = function (rstream, opts) {
                 return output   
             }
             tpl.contents = new Buffer(walk(ast))
-            console.log('Inject ' + count + ' files to ' + path.basename(tpl.path))
+            var colors = gutil.colors
+            gutil.log(PLUGIN_NAME + ': Inject', colors.green(count), 'files to', colors.cyan(path.basename(tpl.path)))
             cb(null, tpl)
         })
     })
