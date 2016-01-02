@@ -50,7 +50,7 @@ Will get result:
 <head>
     <meta charset="UTF-8">
     <title></title>
-    <!-- here:asserts:\.css$??inline --><style>inline content </style><!-- /here -->
+    <!-- here:asserts:\.css$??inline --><style> .inline-style-here{}</style><!-- /here -->
     <!-- here:asserts:\.css$ --><link rel="stylesheet" href="/path/to/asserts/index.css" /><!-- /here -->
     <!-- here:will-not-inject:css??inline -->
 </head>
