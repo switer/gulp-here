@@ -24,7 +24,7 @@ gulp.task('default', function () {
 })
 ```
 
-Into resource to HTML: 
+Inject resource to HTML: 
 
 ```html
 <!DOCTYPE html>
