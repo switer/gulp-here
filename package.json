@@ -1,5 +1,5 @@
 {
-  "name": "gulp-release",
+  "name": "gulp-here",
   "version": "1.0.0",
   "description": "Transform resource and inject to HTML",
   "main": "index.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/switer/gulp-release.git"
+    "url": "git+https://github.com/switer/gulp-here.git"
   },
   "keywords": [
     "gulp",
@@ -19,9 +19,9 @@
   "author": "switer",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/switer/gulp-release/issues"
+    "url": "https://github.com/switer/gulp-here/issues"
   },
-  "homepage": "https://github.com/switer/gulp-release#readme",
+  "homepage": "https://github.com/switer/gulp-here#readme",
   "dependencies": {
     "block-ast": "^1.0.4",
     "event-stream": "^3.3.2",

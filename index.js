@@ -9,11 +9,11 @@ var PluginError = gutil.PluginError
 var PLUGIN_NAME = require('./package.json').name
 
 var parser = ASTParser(
-    /<!--\s*\/?\brelease\b.*?-->/gm
+    /<!--\s*\/?\bhere\b.*?-->/gm
 , function isSelfCloseTag(tag) {
-    return /<!--\s*release\:.*?\/-->/m.test(tag)
+    return /<!--\s*here\:.*?\/-->/m.test(tag)
 }, function isOpenTag(tag) {
-    return /^<!--\s*release\:/m.test(tag)
+    return /^<!--\s*here\:/m.test(tag)
 }, {
     strict: true
 })
@@ -35,8 +35,8 @@ function transformTag(file) {
     }
 }
 function parseExpr(str) {
-    // release:xx:xxx??inline
-    var matches = /^<!--\s*release\:(.*?)\s*-->$/.exec(str.trim())
+    // here:xx:xxx??inline
+    var matches = /^<!--\s*here\:(.*?)\s*-->$/.exec(str.trim())
     if (!matches || !matches[1]) return null
     var expr = matches[1]
     var parts = expr.split('??')
@@ -107,7 +107,7 @@ module.exports = function (rstream, opts) {
                     case 3:
                         var expression = isBlock ? node.openHTML : node.outerHTML
                         var startag = isBlock ? expression : expression.replace(/\/-->$/, '-->')
-                        var endtag = isBlock ? node.closeHTML : '<!--/release-->'
+                        var endtag = isBlock ? node.closeHTML : '<!--/here-->'
                         var exprObj = parseExpr(expression)
                         if (exprObj) {
                             output += startag
@@ -133,7 +133,7 @@ module.exports = function (rstream, opts) {
                             }
                             output += endtag
                         } else {
-                            console.warn('Unvalid release expression:"' + expression +'"')
+                            this.emit('error', new PluginError(PLUGIN_NAME, 'Unvalid expression:"' + expression +'"'))
                             break
                         }
                         break
