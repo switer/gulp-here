@@ -38,21 +38,31 @@ module.exports = function (rstream, opts) {
     var namespace = opts.name
     var transform = opts.transform
     var done // flag for resouce stream
+    var waitting
 
     function collectResources(cb) {
-        if (done) cb(resources)
-        else if (rstream._done) {
+        if (waitting) {
+            waitting.push(cb)
+        } else if (done) {
+            cb(resources)
+        } else if (rstream._done) {
             cb(rstream._resources || [])
         } else {
-            rstream.pipe(map(function (file, cb) {
-                cb(null, file)
-            })).pipe(es.map(function (data, cb) {
-                resources.push(data)
-                cb(null, data)
+            waitting = []
+            rstream.pipe(map(function (file, next) {
+                resources.push(file)
+                next(null, file)
             })).on('end', function () {
                 rstream._done = done = true
                 rstream._resources = resources
                 cb(resources)
+                var queue = waitting
+                waitting = null
+                setTimeout(function () {
+                    queue.forEach(function (c) {
+                        c(resources)
+                    })
+                })
             })
         }
     }
