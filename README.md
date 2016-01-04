@@ -2,7 +2,7 @@ gulp-here
 =========
 [![npm version](https://badge.fury.io/js/gulp-here.svg)](https://badge.fury.io/js/gulp-here)
 
-Transform resource and inject to HTML
+Transform and inject resources into HTML template.
 
 ## Install
 
@@ -12,12 +12,14 @@ npm install gulp-here --save-dev
 
 ## Usage
 
-**In gulp stream:**
+
+* **In gulp stream:**
+
 ```js
 var here = require('gulp-here')
 gulp.src('asserts/*.html')
     .pipe(
-        require('gulp-here')(gulp.src(['asserts/*.css', 'asserts/*.js']), {
+        here(gulp.src(['asserts/*.css', 'asserts/*.js']), {
             /**
              * Namespace match
              * @optional
@@ -29,7 +31,7 @@ gulp.src('asserts/*.html')
              * @optional
              * @param  {Array} resources  resources list, each item is a vinyl stream
              * @param  {Stream} target    target html template for injecting
-             * @param  {Object} options   options given by here's tag of template html.
+             * @param  {Object} options   options given by `Here`'s tag of html template.
              * @return {Array}            New resources list
              */
             sort: function (resources, target, options) {
@@ -51,8 +53,9 @@ gulp.src('asserts/*.html')
         )
     )
 ```
+> Notice: File object is a [vinly](https://github.com/gulpjs/vinyl) stream.
 
-**Template syntax:**
+* **Template syntax:**
 
 Inject tag syntax in the format of: <!--here[:namespace]:regex_match[??query]--><!--here-->
 
@@ -61,17 +64,17 @@ Inject tag syntax in the format of: <!--here[:namespace]:regex_match[??query]-->
 <!-- here:\.css$ --><!-- /here -->
 ```
 
-Inline resourcce:
+Inline resources:
 ```html
 <!-- here:\.css$??inline --><!-- /here -->
 ```
 
-Namespace match(`will match with optiosn.name if given`):
+Namespace match(`matching with "options.name" if given`):
 ```html
 <!-- here:namespace:\.css$ --><!-- /here -->
 ```
 
-More complex regexpmatch:
+More complex matching regexp:
 ```html
 <!-- here:\.(css|js|jsx)$ --><!-- /here -->
 ```
