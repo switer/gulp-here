@@ -59,12 +59,14 @@ gulp.src('asserts/*.html')
 
 Inject tag syntax in the format of: <!--here[:namespace]:regex_match[??query]--><!--here-->
 
-> Notice: query will be passed to **sort** and **transform** method as options.
 ```html
 <!-- here:\.css$ --><!-- /here -->
 ```
 
 Inline resources:
+
+> Notice: query will be passed to **sort** and **transform** method as options.
+
 ```html
 <!-- here:\.css$??inline --><!-- /here -->
 ```
