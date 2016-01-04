@@ -1,7 +1,7 @@
 {
   "name": "gulp-here",
-  "version": "1.0.1",
-  "description": "Transform resource and inject to HTML",
+  "version": "1.0.2",
+  "description": "Transform and inject resources into HTML template.",
   "main": "index.js",
   "scripts": {
     "test": "node test"
@@ -23,9 +23,10 @@
   },
   "homepage": "https://github.com/switer/gulp-here#readme",
   "dependencies": {
-    "block-ast": "^1.0.4",
+    "block-ast": "^1.1.0",
     "event-stream": "^3.3.2",
     "gulp-util": "^3.0.7",
+    "map-stream": "0.0.6",
     "through2": "^2.0.0"
   },
   "devDependencies": {

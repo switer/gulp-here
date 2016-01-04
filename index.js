@@ -3,6 +3,7 @@
 var through = require('through2')
 var gutil = require('gulp-util')
 var es = require('event-stream')
+var map = require('map-stream')
 var ASTParser = require('block-ast')
 var path = require('path')
 var PLUGIN_NAME = require('./package.json').name
@@ -24,34 +25,6 @@ var parser = ASTParser(
 })
 
 /**
- * Here' tag expression parse functon
- */
-function parseExpr(str) {
-    // here:xx:xxx??inline
-    var matches = /^<!--\s*here\:(.*?)\s*-->$/.exec(str.trim())
-    if (!matches || !matches[1]) return null
-    var expr = matches[1]
-    var parts = expr.split('??')
-    var query = parts[1]
-    var isInline = /\binline\b/.test(query)
-    var namespace = ''
-    var reg
-
-    expr = parts[0]
-    parts = expr.split(':')
-    if (parts.length > 1) {
-        namespace = parts.shift()
-    }
-    reg = new RegExp(parts.pop())
-
-    return {
-        regexp: reg,          // resource match validate regexp
-        namespace: namespace, // resource namespace match
-        inline: isInline      // whether inline resource or not
-    }
-}
-
-/**
  * Inject specified resources into template file
  * @param  {Stream} rstream Resource stream
  * @param  {Object} opts    Inject options
@@ -71,7 +44,9 @@ module.exports = function (rstream, opts) {
         else if (rstream._done) {
             cb(rstream._resources || [])
         } else {
-            rstream.pipe(es.map(function (data, cb) {
+            rstream.pipe(map(function (file, cb) {
+                cb(null, file)
+            })).pipe(es.map(function (data, cb) {
                 resources.push(data)
                 cb(null, data)
             })).on('end', function () {
@@ -93,6 +68,7 @@ module.exports = function (rstream, opts) {
             this.emit('error', new PluginError(PLUGIN_NAME, 'Template target should not be null!'))
             return cb(null, tpl)
         }
+
         var content = tpl.contents.toString()
         var ast = parser(content)
 
@@ -115,12 +91,17 @@ module.exports = function (rstream, opts) {
                     case 3:
                         // expression form tag
                         var expression = isBlock ? node.openHTML : node.outerHTML
-                        var startag = isBlock ? expression : expression.replace(/\/-->$/, '-->')
+                        var starttag = isBlock ? expression : expression.replace(/\/-->$/, '-->')
                         var endtag = isBlock ? node.closeHTML : '<!--/here-->'
-                        var exprObj = parseExpr(expression)
+                        var exprObj = Tag.expr(expression)
                         if (exprObj) {
-                            output += startag
+                            output += starttag
                             if (namespace && exprObj.namespace !== namespace) {
+                                if (node.childNodes.length) {
+                                    output += node.childNodes.map(function (n) {
+                                        return n.toString()
+                                    }).join('')
+                                }
                                 output += endtag
                                 break
                             } else {
@@ -172,8 +153,8 @@ module.exports = function (rstream, opts) {
             }
             tpl.contents = new Buffer(walk(ast))
             gutil.log(
-                PLUGIN_NAME + ': ' +
-                colors.cyan(namespace ? '[' + namespace + '] ' : ' ' ) + 'Inject', 
+                PLUGIN_NAME + ': ' + colors.yellow(count ? '✔ ' : '❗ ') +
+                colors.cyan(namespace ? '[' + namespace + '] ' : ' ' ) + 'Release', 
                 colors.green(count), 
                 'files to', 
                 colors.blue(path.basename(tpl.path))

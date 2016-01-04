@@ -14,9 +14,9 @@ gulp.task('default', function () {
                     asserts, {
                         name: 'asserts',
                         transform: function (file, target, opt) {
-                            if (/\.css$/.test(file.path)) 
+                            if (/\.css$/.test(file.path)) {
                                 return '<link rel="stylesheet" href="$" />'.replace('$', 'path/to/' + path.basename(file.path))
-
+                            }
                             return true
                         },
                         sort: function (resources, target) {
@@ -38,7 +38,7 @@ gulp.task('default', function () {
             )
             .pipe(
                 here(
-                    asserts, { name: 'release' }
+                    asserts.pipe(cssmin()), { name: 'release' }
                 )
             )
             .pipe(gulp.dest('dist'))
