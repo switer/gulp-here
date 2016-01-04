@@ -12,7 +12,7 @@ var PluginError = gutil.PluginError
 var colors = gutil.colors
 
 /**
- * Tokenier to parse html to ast
+ * Tokenier for parsing html to ast
  */
 var parser = ASTParser(
     /<!--\s*\/?\bhere\b.*?-->/gm

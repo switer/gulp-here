@@ -4,58 +4,75 @@ gulp-here
 
 Transform resource and inject to HTML
 
+## Install
+
+```bash
+npm install gulp-here --save-dev
+```
+
 ## Usage
 
+**In gulp stream:**
 ```js
-gulp.task('default', function () {
-    return gulp.src('asserts/*.html')
-            .pipe(
-                require('gulp-herer')(
-                    gulp.src(['asserts/*.css', 'asserts/*.js'])
-                    , {
-                        name: 'asserts',
-                        sort: function (resources, target) {
-                            // resource => ['dist/a.js', 'dist/b.js', 'dist/a.css']
-                        }
-                    }
-                )
-            )
-            .pipe(gulp.dest('dist'))
-})
+var here = require('gulp-here')
+gulp.src('asserts/*.html')
+    .pipe(
+        require('gulp-here')(gulp.src(['asserts/*.css', 'asserts/*.js']), {
+            /**
+             * Namespace match
+             * @optional
+             * @type {String}
+             */
+            name: 'asserts',
+            /**
+             * sort method of all injected resources
+             * @optional
+             * @param  {Array} resources  resources list, each item is a vinyl stream
+             * @param  {Stream} target    target html template for injecting
+             * @param  {Object} options   options given by here's tag of template html.
+             * @return {Array}            New resources list
+             */
+            sort: function (resources, target, options) {
+                // resource => ['dist/a.js', 'dist/b.js', 'dist/a.css']
+            },
+            /**
+             * sort method of all injected resources
+             * @optional
+             * @param  {Stream} file      file is a resource that will be injected to template file. It's a vinyl stream. 
+             * @param  {Stream} target    target html template for injecting
+             * @param  {Object} options   options given by here's tag of template html.
+             * @return {String|Boolean}   
+             */
+            transform: function (file, target, options) {
+                if (cnd1) return false // will skip inject step
+                else if (cnd2) return '<script src="$"></script>'.replace(PREFIX, file.path) // transform to result
+                else return true // continue inject step
+            }
+        )
+    )
 ```
 
-Inject resource to HTML: 
+**Template syntax:**
 
+Inject tag syntax in the format of: <!--here[:namespace]:regex_match[??query]--><!--here-->
+
+> Notice: query will be passed to **sort** and **transform** method as options.
 ```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title></title>
-    <!-- here:asserts:\.css$??inline --><!-- /here -->
-    <!-- here:asserts:\.css$ --><!-- /here -->
-    <!-- here:will-not-inject:css??inline --><!-- /here -->
-</head>
-<body>
-    <!-- here:asserts:\.js$ --><!-- /here -->
-</body>
-</html>
+<!-- here:\.css$ --><!-- /here -->
 ```
 
-Render result: 
-
+Inline resourcce:
 ```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title></title>
-    <!-- here:asserts:\.css$??inline --><style> .inline-style-here{}</style><!-- /here -->
-    <!-- here:asserts:\.css$ --><link rel="stylesheet" href="/path/to/asserts/index.css" /><!-- /here -->
-    <!-- here:will-not-inject:css??inline -->
-</head>
-<body>
-    <!-- here:asserts:\.js$ --><script src="/path/to/asserts/index.js"></script><script src="/path/to/asserts/secondary.js"></script><!-- /here -->
-</body>
-</html>
-````
+<!-- here:\.css$??inline --><!-- /here -->
+```
+
+Namespace match(`will match with optiosn.name if given`):
+```html
+<!-- here:namespace:\.css$ --><!-- /here -->
+```
+
+More complex regexpmatch:
+```html
+<!-- here:\.(css|js|jsx)$ --><!-- /here -->
+```
+
