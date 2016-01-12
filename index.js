@@ -142,7 +142,7 @@ module.exports = function (rstream, opts) {
                                         count ++
                                         return exprObj.inline 
                                             ? Tag.inline(file) 
-                                            : Tag.transform(file)
+                                            : Tag.transform(file, tpl)
                                     } else if (result) {
                                         count ++
                                         return result
