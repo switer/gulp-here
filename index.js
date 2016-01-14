@@ -30,7 +30,7 @@ var parser = ASTParser(
  * @param  {Object} opts    Inject options
  * @return {stream}         Template files stream
  */
-module.exports = function (rstream, opts) {
+function here (rstream, opts) {
     opts = opts || {}
 
     var resources = []
@@ -106,7 +106,10 @@ module.exports = function (rstream, opts) {
                         var exprObj = Tag.expr(expression)
                         if (exprObj) {
                             output += starttag
-                            if (namespace && exprObj.namespace !== namespace) {
+                            if ( 
+                                (!namespace && exprObj.namespace) || 
+                                (namespace && (exprObj.namespace !== namespace && exprObj.namespace !== '*') ) 
+                            ) {
                                 if (node.childNodes.length) {
                                     output += node.childNodes.map(function (n) {
                                         return n.toString()
@@ -117,6 +120,7 @@ module.exports = function (rstream, opts) {
                             } else {
                                 var tagObj = {
                                     inline: exprObj.inline,
+                                    wrap: exprObj.wrap,
                                     namespace: exprObj.namespace
                                 }
                                 var rs = resources.slice(0)
@@ -141,7 +145,7 @@ module.exports = function (rstream, opts) {
                                     if (result === true) {
                                         count ++
                                         return exprObj.inline 
-                                            ? Tag.inline(file) 
+                                            ? Tag.inline(file, tpl, tagObj) 
                                             : Tag.transform(file, tpl)
                                     } else if (result) {
                                         count ++
@@ -173,3 +177,10 @@ module.exports = function (rstream, opts) {
         })
     })
 }
+
+here.mapping = function (from, to) {
+    Tag.extMap(from, to)
+    return here
+}
+
+module.exports = here

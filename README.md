@@ -62,11 +62,19 @@ Inject tag syntax in the format of:
 ```html
 <!--here[:namespace]:regex_match[??query]--><!--here-->
 ```
-
 For example:
 ```html
 <!-- here:asserts_here:\.css$ --><!-- /here -->
 ```
+
+Support queries:
+    
+- **inline** 
+    Inline file contents to HTML, default `false`
+
+- **wrap** 
+    HTML tag wrapper HTML tag for resource contontent, default `true`.Using with inline only.
+
 
 Inline resources:
 

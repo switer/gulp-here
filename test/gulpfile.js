@@ -5,6 +5,8 @@ var path = require('path')
 var here = require('../index')
 var cssmin = require('gulp-cssmin')
 
+// here.mapping('css', 'html')
+
 gulp.task('default', function () {
     var asserts = gulp.src(['asserts/*.css','asserts/*.js']).pipe(cssmin())
 
@@ -35,6 +37,11 @@ gulp.task('default', function () {
             .pipe(
                 here(
                     asserts.pipe(cssmin()), { name: 'release' }
+                )
+            )
+            .pipe(
+                here(
+                    asserts.pipe(cssmin()), { name: 'no-transform' }
                 )
             )
             .pipe(gulp.dest('dist'))
