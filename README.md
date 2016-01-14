@@ -57,10 +57,15 @@ gulp.src('asserts/*.html')
 
 * **Template syntax:**
 
-Inject tag syntax in the format of: <!--here[:namespace]:regex_match[??query]--><!--here-->
+Inject tag syntax in the format of: 
 
 ```html
-<!-- here:\.css$ --><!-- /here -->
+<!--here[:namespace]:regex_match[??query]--><!--here-->
+```
+
+For example:
+```html
+<!-- here:asserts_here:\.css$ --><!-- /here -->
 ```
 
 Inline resources:
