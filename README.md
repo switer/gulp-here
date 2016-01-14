@@ -27,27 +27,27 @@ gulp.src('asserts/*.html')
              */
             name: 'asserts',
             /**
-             * sort method of all injected resources
+             * Sort method of the injecting order of resources
              * @optional
              * @param  {Array} resources  resources list, each item is a vinyl stream
              * @param  {Stream} target    target html template for injecting
-             * @param  {Object} options   options given by `Here`'s tag of html template.
+             * @param  {Object} options   options given by `Here`'s tag of html template
              * @return {Array}            New resources list
              */
             sort: function (resources, target, options) {
                 // resource => ['dist/a.js', 'dist/b.js', 'dist/a.css']
             },
             /**
-             * sort method of all injected resources
+             * Transform method that for injecting custom resource url/content
              * @optional
-             * @param  {Stream} file      file is a resource that will be injected to template file. It's a vinyl stream. 
+             * @param  {Stream} file      file is a resource that will be injected to template file. It's a vinyl stream.
              * @param  {Stream} target    target html template for injecting
-             * @param  {Object} options   options given by here's tag of template html.
+             * @param  {Object} options   options given by here's tag of template html
              * @return {String|Boolean}   
              */
             transform: function (file, target, options) {
                 if (cnd1) return false // will skip inject step
-                else if (cnd2) return '<script src="$"></script>'.replace(PREFIX, file.path) // transform to result
+                else if (cnd2) return '<script src="$"></script>'.replace(PREFIX, file.path) // transform to custom centent
                 else return true // continue inject step
             }
         )
