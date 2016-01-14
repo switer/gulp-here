@@ -94,3 +94,11 @@ More complex matching regexp:
 <!-- here:\.(css|js|jsx)$ --><!-- /here -->
 ```
 
+
+* **Extname mapping:**
+
+using `here.mapping(from, to)` to mapping extension name of resource for reuseing resource wrapper when injecting:
+```js
+here.mapping('ejs', 'html')
+here.mapping('less', 'css')
+```
