@@ -62,10 +62,6 @@ Inject tag syntax in the format of:
 ```html
 <!--here[:namespace]:regex_match[??query]--><!--here-->
 ```
-For example:
-```html
-<!-- here:asserts_here:\.css$ --><!-- /here -->
-```
 
 Support queries:
     
@@ -75,6 +71,10 @@ Support queries:
 - **wrap** 
     HTML tag wrapper HTML tag for resource contontent, default `true`.Using with inline only.
 
+For example:
+```html
+<!-- here:asserts_here:\.html$??inline&wrap=false --><!-- /here -->
+```
 
 Inline resources:
 
@@ -97,8 +97,8 @@ More complex matching regexp:
 
 * **Extname mapping:**
 
-using `here.mapping(from, to)` to mapping extension name of resource for reuseing resource wrapper when injecting:
+Using `here.mapping(from, to)` to map extension of resource for reusing default wrapper when injecting:
 ```js
 here.mapping('ejs', 'html')
-here.mapping('less', 'css')
+    .mapping('less', 'css')
 ```
