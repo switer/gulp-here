@@ -146,7 +146,7 @@ function here (rstream, opts) {
                                     }
                                     if (result === true) {
                                         count ++
-                                        return exprObj.inline 
+                                        return opts.inline 
                                             ? Tag.inline(file, tpl, opts) 
                                             : Tag.transform(file, tpl)
                                     } else if (result) {

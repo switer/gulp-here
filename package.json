@@ -1,6 +1,6 @@
 {
   "name": "gulp-here",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Transform and inject resources into HTML template.",
   "main": "index.js",
   "scripts": {
