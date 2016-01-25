@@ -1,6 +1,6 @@
 {
   "name": "gulp-here",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Transform and inject resources into HTML template.",
   "main": "index.js",
   "scripts": {
@@ -27,7 +27,8 @@
     "event-stream": "^3.3.2",
     "gulp-util": "^3.0.7",
     "map-stream": "0.0.6",
-    "through2": "^2.0.0"
+    "through2": "^2.0.0",
+    "underscore": "^1.8.3"
   },
   "devDependencies": {
     "gulp-cssmin": "^0.1.7"

@@ -8,6 +8,7 @@ var ASTParser = require('block-ast')
 var path = require('path')
 var PLUGIN_NAME = require('./package.json').name
 var Tag = require('./lib/tag')
+var _ = require('underscore')
 var PluginError = gutil.PluginError
 var colors = gutil.colors
 
@@ -139,13 +140,14 @@ function here (rstream, opts) {
 
                                 output += rs.map(function (file) {
                                     var result = true
+                                    var opts = _.extend({}, tagObj)
                                     if (transform) {
-                                        result = transform(file, tpl, tagObj)
+                                        result = transform(file, tpl, opts)
                                     }
                                     if (result === true) {
                                         count ++
                                         return exprObj.inline 
-                                            ? Tag.inline(file, tpl, tagObj) 
+                                            ? Tag.inline(file, tpl, opts) 
                                             : Tag.transform(file, tpl)
                                     } else if (result) {
                                         count ++
