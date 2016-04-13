@@ -8,7 +8,7 @@ var cssmin = require('gulp-cssmin')
 // here.mapping('css', 'html')
 
 gulp.task('default', function () {
-    var asserts = gulp.src(['asserts/*.css','asserts/*.js']).pipe(cssmin())
+    var asserts = gulp.src(['asserts/*.css','asserts/*.js'])
 
     return gulp.src('asserts/*.html')
             .pipe(
@@ -27,21 +27,21 @@ gulp.task('default', function () {
                         })
                     },
                     transform: function (file, target, opt) {
-                        if (/\.css$/.test(file.path)) {
-                            return '<link rel="stylesheet" href="$" />'.replace('$', 'path/to/' + path.basename(file.path))
-                        }
-                        return true
+                        opt.wrap = true
+                        return '/path/to/' + path.basename(file.path)
                     }
                 })
             )
             .pipe(
                 here(
-                    asserts.pipe(cssmin()), { name: 'release' }
+                    asserts, 
+                    { name: 'release' }
                 )
             )
             .pipe(
                 here(
-                    asserts.pipe(cssmin()), { name: 'no-transform' }
+                    asserts, 
+                    { name: 'no-transform' }
                 )
             )
             .pipe(gulp.dest('dist'))

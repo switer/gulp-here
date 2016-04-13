@@ -149,6 +149,8 @@ function here (rstream, opts) {
                                         return opts.inline 
                                             ? Tag.inline(file, tpl, opts) 
                                             : Tag.transform(file, tpl)
+                                    } else if (result && opts.wrap) {
+                                        return Tag.transform(result)
                                     } else if (result) {
                                         count ++
                                         return result

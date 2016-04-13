@@ -4,7 +4,7 @@
   "description": "Transform and inject resources into HTML template.",
   "main": "index.js",
   "scripts": {
-    "test": "node test"
+    "test": "cd test && gulp"
   },
   "repository": {
     "type": "git",
