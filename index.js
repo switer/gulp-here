@@ -122,7 +122,8 @@ function here (rstream, opts) {
                                 var tagObj = {
                                     inline: exprObj.inline,
                                     wrap: exprObj.wrap,
-                                    namespace: exprObj.namespace
+                                    namespace: exprObj.namespace,
+                                    wrapresult: false
                                 }
                                 var rs = resources.slice(0)
 
@@ -149,7 +150,7 @@ function here (rstream, opts) {
                                         return opts.inline 
                                             ? Tag.inline(file, tpl, opts) 
                                             : Tag.transform(file, tpl)
-                                    } else if (result && opts.wrap) {
+                                    } else if (result && opts.wrapresult) {
                                         return Tag.transform(result)
                                     } else if (result) {
                                         count ++

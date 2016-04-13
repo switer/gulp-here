@@ -27,7 +27,7 @@ gulp.task('default', function () {
                         })
                     },
                     transform: function (file, target, opt) {
-                        opt.wrap = true
+                        opt.wrapresult = false
                         return '/path/to/' + path.basename(file.path)
                     }
                 })
