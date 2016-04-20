@@ -145,16 +145,18 @@ function here (rstream, opts) {
                                     if (transform) {
                                         result = transform(file, tpl, opts)
                                     }
+                                    count ++
                                     if (result === true) {
-                                        count ++
                                         return opts.inline 
                                             ? Tag.inline(file, tpl, opts) 
                                             : Tag.transform(file, tpl)
                                     } else if (result && opts.wrapresult) {
                                         return Tag.transform(result)
                                     } else if (result) {
-                                        count ++
                                         return result
+                                    } else {
+                                        count --
+                                        return ''
                                     }
                                 }).join('')
                             }
