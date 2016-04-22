@@ -26,9 +26,11 @@ gulp.task('default', function () {
                             else return 0
                         })
                     },
+                    prefix: function (file, target, opt) {
+                        return 'http://path/to/' + file.relative
+                    },
                     transform: function (file, target, opt) {
-                        opt.wrapresult = false
-                        return '/path/to/' + path.basename(file.path)
+                        return true
                     }
                 })
             )

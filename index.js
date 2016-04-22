@@ -5,10 +5,11 @@ var gutil = require('gulp-util')
 var es = require('event-stream')
 var map = require('map-stream')
 var ASTParser = require('block-ast')
+var _ = require('underscore')
 var path = require('path')
 var PLUGIN_NAME = require('./package.json').name
 var Tag = require('./lib/tag')
-var _ = require('underscore')
+var lang = require('./lib/lang')
 var PluginError = gutil.PluginError
 var colors = gutil.colors
 
@@ -38,6 +39,7 @@ function here (rstream, opts) {
     var sort = opts.sort
     var namespace = opts.name
     var transform = opts.transform
+    var prefix = opts.prefix
     var done // flag for resouce stream
     var waitting
 
@@ -123,7 +125,8 @@ function here (rstream, opts) {
                                     inline: exprObj.inline,
                                     wrap: exprObj.wrap,
                                     namespace: exprObj.namespace,
-                                    wrapresult: false
+                                    wrapresult: false,
+                                    relative: true // default set relative, if not url path
                                 }
                                 var rs = resources.slice(0)
 
@@ -142,6 +145,14 @@ function here (rstream, opts) {
                                 output += rs.map(function (file) {
                                     var result = true
                                     var opts = _.extend({}, tagObj)
+
+                                    file = file.clone()
+                                    // marked as dirty will not set relative path
+                                    if (typeof prefix === 'function') {
+                                        file.path = prefix(file, tpl, opts)
+                                    } else if (typeof prefix === 'string') {
+                                        file.path = prefix + file.relative
+                                    }
                                     if (transform) {
                                         result = transform(file, tpl, opts)
                                     }
@@ -149,9 +160,9 @@ function here (rstream, opts) {
                                     if (result === true) {
                                         return opts.inline 
                                             ? Tag.inline(file, tpl, opts) 
-                                            : Tag.transform(file, tpl)
+                                            : Tag.transform(file, tpl, opts)
                                     } else if (result && opts.wrapresult) {
-                                        return Tag.transform(result)
+                                        return Tag.transform(result, opts)
                                     } else if (result) {
                                         return result
                                     } else {

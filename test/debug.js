@@ -1,0 +1,5 @@
+var vfs = require('vinyl-fs')
+var here = require('../index')
+vfs.src('tmp/index.html')
+	.pipe(here(vfs.src('tmp/*.js')))
+	.pipe(vfs.dest('./dist'))

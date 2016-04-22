@@ -38,6 +38,21 @@ gulp.src('asserts/*.html')
                 // resource => ['dist/a.js', 'dist/b.js', 'dist/a.css']
             },
             /**
+             * Change resource's path manually
+             * @optional
+             * @param  {Stream} file      file is a resource that will be injected to template file. It's a vinyl stream.
+             * @param  {Stream} target    target html template for injecting
+             * @param  {Object} options   options given by here's tag of template html
+             * @return {String} full path of the resource
+             */
+            prefix: function (file, target, options) {
+                // set relative to false will not change path to relative path of "cwd"
+                option.relative = false
+                return  '/path/to/cdn/' + file.relative
+            },
+            // or 
+            // prefix: 'http://path/to/resource/',
+            /**
              * Transform method that for injecting custom resource url/content
              * @optional
              * @param  {Stream} file      file is a resource that will be injected to template file. It's a vinyl stream.
